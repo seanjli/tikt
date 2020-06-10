@@ -1,0 +1,22 @@
+{% extends "_base.html" %}
+{% block content %}
+
+<h1>TIKT Booth</h1>
+<div class="icebreak">
+	<h3>Please fill out the following form.</h3>
+	<form action="{{ url_for('generate') }}" method="post" class="inline-form">
+		{{ form.csrf_token }}
+		<div class="input-group">
+			{{ form.name.label }}
+			{{ form.name }}
+		</div>
+		<div class="input'group">
+			{{ form.prob_num.label }}
+			{{ form.prob_num }}
+		</div>
+		<div class="input-group">
+ 	  		<button type="submit">Submit</button>
+ 	     	</div>
+</div>
+
+{% endblock %}
