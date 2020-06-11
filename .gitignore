@@ -5,3 +5,4 @@ __pycache__
 *.DS_Store
 project/_config.py
 project/*.db
+project/static/tests
