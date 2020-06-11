@@ -1,0 +1,23 @@
+{% extends "_base.html" %}
+{% block content %}
+
+<h1>Welcome to TiKT!</h1>
+
+<div class="form">
+	<h3>Please login to access the TiKT generator.</h3>
+	<form action="/" method="post">
+		{{ form.csrf_token }}
+		<div class="input-group">
+			{{ form.user.label }}
+			{{ form.user }}
+		</div>
+		<div class="input-group">
+			{{ form.pwd.label }}
+			{{ form.pwd }}
+		</div>
+		<div class="input-group">
+			<button type="submit">Submit</button>
+		</div>
+</div>
+
+{% endblock %}

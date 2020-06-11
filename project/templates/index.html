@@ -1,8 +1,8 @@
 {% extends "_base.html" %}
 {% block content %}
 
-<h1>TIKT Booth</h1>
-<div class="icebreak">
+<h1>TiKT Booth</h1>
+<div class="form">
 	<h3>Please fill out the following form.</h3>
 	<form action="{{ url_for('generate') }}" method="post" class="inline-form">
 		{{ form.csrf_token }}
@@ -10,9 +10,21 @@
 			{{ form.name.label }}
 			{{ form.name }}
 		</div>
-		<div class="input'group">
+		<div class="input-group">
+			{{ form.author.label }}
+			{{ form.author }}
+		</div>
+		<div class="input-group">
 			{{ form.prob_num.label }}
 			{{ form.prob_num }}
+		</div>
+		<div class="input-group">
+			{{ form.min_diff.label }}
+			{{ form.min_diff }}
+		</div>
+		<div class="input-group">
+			{{ form.max_diff.label }}
+			{{ form.max_diff }}
 		</div>
 		<div class="input-group">
  	  		<button type="submit">Submit</button>
