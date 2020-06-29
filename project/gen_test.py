@@ -1,3 +1,4 @@
+from _config import DATABASE
 import random
 import string
 from random import randint
@@ -7,7 +8,7 @@ import os
 
 def make_test(name, author, prob_num, min_diff, max_diff):
 
-    with sqlite3.connect("aime.db") as conn:
+    with sqlite3.connect(DATABASE) as conn:
         
         c = conn.cursor()
         trycount = 0

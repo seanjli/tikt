@@ -4,22 +4,28 @@
 <h1>Welcome to TiKT!</h1>
 
 <div class="form">
-	<h3>Please login to access the TiKT generator.</h3>
-	<form action="/" method="post">
+	<h3>TiKT Registration</h3>
+	<form action="/register/" method="post">
 		{{ form.csrf_token }}
 		<div class="input-group">
 			{{ form.user.label }}
 			{{ form.user }}
 		</div>
 		<div class="input-group">
+			{{ form.email.label }}
+			{{ form.email }}
+		</div>
+		<div class="input-group">
 			{{ form.pwd.label }}
 			{{ form.pwd }}
+		</div>
+		<div class="input-group">
+			{{ form.repeat_pwd.label }}
+			{{ form.repeat_pwd }}
 		</div>
 		<div class="input-group">
 			<button type="submit">Submit</button>
 		</div>
 </div>
-
-<p>Don't have an account? <a href="/register">Register here.</a></p>
 
 {% endblock %}

@@ -6,3 +6,4 @@ __pycache__
 project/_config.py
 project/*.db
 project/static/tests
+project/*.csv

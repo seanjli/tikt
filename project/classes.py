@@ -11,4 +11,3 @@ class Problem:
 
     def __repr__(self):
         return "{problem: " + self.title + "}"
-
