@@ -23,7 +23,7 @@ class Problem(db.Model):
         self.answer = answer
 
     def __repr__(self):
-        return "<problem {0}>".format(self.title)
+        return "<problem {0}>".format(self.ID)
 
 class User(db.Model):
 
@@ -36,14 +36,16 @@ class User(db.Model):
     testcount = db.Column(db.Integer)
     pused = db.Column(db.String)
     pfav = db.Column(db.String)
+    role = db.Column(db.String, default='user')
 
-    def __init__(self, user, email, salted_pwd):
+    def __init__(self, user, email, salted_pwd, role=None):
         self.user = user
         self.email = email
         self.salted_pwd = salted_pwd
         self.testcount = 0
-        self.pused = " "
-        self.pfav = " "
+        self.pused = ""
+        self.pfav = ""
+        self.role = role
 
     def __repr__(self):
         return '<User {0}>'.format(self.user)

@@ -7,9 +7,4 @@ import csv
 import sqlite3
 
 db.create_all()
-
-problems = csv.reader(open("aime.csv","rU"))
-for row in problems:
-    db.session.add(Problem(row[0], row[1], row[2], row[3], row[4], row[5], row[6]))
-
 db.session.commit()
