@@ -1,36 +1,41 @@
 {% extends "_base.html" %}
 {% block content %}
 
-<h1>TiKT Booth</h1>
 <div class="form">
-	<h3>Please fill out the following form.</h3>
+	<br>
+	<h1>TiKT Booth</h1>
+	<h6 class="form-text text-muted">Use the following form to generate a custom practice test.</h6>
+	<br>
 	<form action="{{ url_for('generate') }}" method="post" class="inline-form">
 		{{ form.csrf_token }}
-		<div class="input-group">
+		<div class="form-group">
 			{{ form.name.label }}
 			{{ form.name }}
 		</div>
-		<div class="input-group">
+		<div class="form-group">
 			{{ form.author.label }}
 			{{ form.author }}
 		</div>
-		<div class="input-group">
+		<div class="form-group">
 			{{ form.prob_num.label }}
 			{{ form.prob_num }}
 		</div>
-		<div class="input-group">
+		<div class="form-group">
 			{{ form.min_diff.label }}
 			{{ form.min_diff }}
 		</div>
-		<div class="input-group">
+		<div class="form-group">
 			{{ form.max_diff.label }}
 			{{ form.max_diff }}
 		</div>
 		<div class="input-group">
- 	  		<button type="submit">Submit</button>
+ 	  		<button type="submit" class="btn btn-dark">Submit</button>
  	     	</div>
+	</form>
+	<br>
+	<p><a href={{ url_for('logout') }}>Click here to logout.</a></p>
 </div>
 
-<p><a href={{ url_for('logout') }}>Click here to logout.</a></p>
+
 
 {% endblock %}

@@ -1,0 +1,26 @@
+{% extends "_base.html" %}
+{% block content %}
+
+<h1>Test Info</h1>
+<h3>Test Title: {{ test.title }}</h3>
+<h3>Date Created: {{ test.date }}</h3>
+<h3>Exam Type: {{ test.exam_type }}</h3>
+<h3>Number of problems: {{ test.pnum }}</h3>
+
+<hr>
+
+{% for prob in probs %}
+	<h2><strong>Problem {{probs.index(prob)+1}}.</strong></h2>
+	<strong>Source: </strong>{{prob.title}}
+	<br>
+	<strong>ID: </strong>{{prob.ID}}
+	<br>
+	<strong>Subject: </strong>{{prob.subject}}
+	<br>
+	<strong>Difficulty: </strong>{{prob.diff}}
+	<br>
+	<strong>Tags: </strong>{{prob.tags}}
+	<hr>
+{% endfor %}
+
+{% endblock %}

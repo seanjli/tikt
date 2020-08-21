@@ -1,0 +1,35 @@
+{% extends '_base.html' %}
+{% block content %}
+
+<br>
+
+<h1>TiKollection</h1>
+<h6 class="text-muted">A list of tests you've generated in the past.</h6>
+	<br>
+	<div class="datagrid">
+		<table>
+			<thead>
+				<tr>
+					<th width="200px"><strong>Test Name</strong></th>
+					<th width="100px"><strong>Date Created</strong></th>
+					<th width="100px"><strong>Test ID</strong></th>
+					<th width="100px"><strong>Test Type</strong></th>
+					<th><strong>Links</strong></th>
+				</tr>
+			</thead>
+			{% for test in tests %}
+				<tr>
+					<td width="200px">{{ test.title }}</td>
+					<td width="100px">{{ test.date }}</td>
+					<td width="100px">{{ test.test_url }}</td>
+					<td width="100px">{{ test.exam_type }}</td>
+					<td>
+						<a href="/static/tests/{{ test.test_url }}.pdf" target="_blank">(pdf)</a> <a href="/static/tests/{{ test.test_url}}.tex" target="_blank">(tex)</a> <a href="{{ url_for("view_test_info", test_id=test.test_url)}}">(info)</a>
+					</td>
+				</tr>
+			{% endfor %}
+		</table>
+	</div>
+</div>
+
+{% endblock %}

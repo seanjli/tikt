@@ -60,7 +60,8 @@ def render_test(name, author, problems):
 
     os.system("latexmk pre-" + key + ".tex")
     os.system("mv pre-" + key + ".pdf " + key + ".pdf")
+    os.system("mv pre-" + key + ".tex " + key + ".tex")
     os.system("rm pre-" + key + "*")
-    os.system("mv " + key + ".pdf static/tests/")
+    os.system("mv " + key + ".* static/tests/")
 
     return key

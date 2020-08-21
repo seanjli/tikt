@@ -56,6 +56,13 @@ def allowed_file(filename):
     return '.' in filename and \
             filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+def get_tests():
+    return db.session.query(Test).filter_by(author=session['user_id']).order_by(Test.date.asc())
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
 # route handlers
 
 @app.route('/logout/')
@@ -94,7 +101,7 @@ def login():
 
     return render_template('login.html', form=form, error = error)
 
-@app.route('/home', methods=['GET', 'POST'])
+@app.route('/generate', methods=['GET', 'POST'])
 @login_required
 def generate():
     form = TestForm(request.form)
@@ -155,7 +162,7 @@ def register():
 @login_required
 def upload_file():
     if not session['role'] == 'admin':
-        return render_template('denied.html')
+        return render_template('403.html'), 403
     if request.method == 'POST':
         if 'file' not in request.files:
             flash('No file part')
@@ -173,3 +180,28 @@ def upload_file():
             flash('Bad file type')
             return render_template('upload.html')
     return render_template('upload.html')
+
+@app.route('/view/')
+@login_required
+def view_tests():
+    return render_template('view.html',
+            tests=get_tests()
+            )
+
+@app.route('/test_info/<test_id>')
+@login_required
+def view_test_info(test_id):
+    tests = db.session.query(Test).filter_by(test_url=test_id).order_by(Test.date.asc())
+    if len(tests.all()) == 0:
+        return render_template('403.html'), 403
+    test = tests[0]
+    if not int(test.author) == session['user_id']:
+        return render_template('403.html'), 403
+    prob_ids = test.problems.split(",")
+    probs = []
+    for pid in prob_ids:
+        prob = (db.session.query(Problem).filter_by(ID = pid))[0]
+        probs.append(prob)
+    return render_template('info.html',
+            probs=probs,
+            test=test)

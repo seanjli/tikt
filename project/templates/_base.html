@@ -3,19 +3,33 @@
 	<head>
 		<title>TiKT Generator</title>
 	</head>
-	<body>
-		<div class="page">
-
+	<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 			{% for message in get_flashed_messages() %}
-			<div class="flash">{{ message }}</div>
+			<div class="alert alert-success">{{ message }}</div>
 			{% endfor %}
 
 			{% if error %}
-			<div class="error"><strong>Error:</strong> {{ error }}</div>
+			<div class="alert alert-danger"><strong>Error:</strong> {{ error }}</div>
 			{% endif %}
 
-			<br>
+			<nav class="navbar navbar-light navbar-expand-lg" role="navigation">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<a class="navbar-brand" href="#"><strong>T</strong>est <strong>i</strong>n <strong>K</strong>iller <strong>T</strong>ime</a>
+					</div>
+					<ul class="nav navbar-nav">
+						<li><a href="#">Home</a></li>
+						<li><a href="{{ url_for('generate') }}">TiKT Booth</a></li>
+						<li><a href="{{ url_for('view_tests') }}">TiKollection</a></li>
+					</ul>
+				</div>
+			</nav>
 
+			<br>
+	<body>
+		<div class="container-lg bg-light text-dark">
 			{% block content %}
 			{% endblock %}
 		</div>
