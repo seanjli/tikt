@@ -59,6 +59,23 @@ def allowed_file(filename):
 def get_tests():
     return db.session.query(Test).filter_by(author=session['user_id']).order_by(Test.date.asc())
 
+def get_user():
+    return (db.session.query(User).filter_by(user_id=str(session['user_id'])))[0]
+
+def get_probs(prob_ids):
+    probs = []
+    for pid in prob_ids:
+        prob = (db.session.query(Problem).filter_by(ID = pid))[0]
+        probs.append(prob)
+    return probs
+
+def get_fav_ids():
+    user = get_user()
+    favs = user.pfav.split(",")
+    if favs == [""]:
+        favs = []
+    return favs
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
@@ -184,8 +201,12 @@ def upload_file():
 @app.route('/view/')
 @login_required
 def view_tests():
+    favs = get_fav_ids()
+    probs = get_probs(favs)
+
     return render_template('view.html',
-            tests=get_tests()
+            tests=get_tests(),
+            probs=probs
             )
 
 @app.route('/test_info/<test_id>')
@@ -193,15 +214,71 @@ def view_tests():
 def view_test_info(test_id):
     tests = db.session.query(Test).filter_by(test_url=test_id).order_by(Test.date.asc())
     if len(tests.all()) == 0:
-        return render_template('403.html'), 403
+        return render_template('404.html'), 404
     test = tests[0]
     if not int(test.author) == session['user_id']:
         return render_template('403.html'), 403
     prob_ids = test.problems.split(",")
-    probs = []
+    probs = get_probs(prob_ids)
+    
+    favs = get_fav_ids()
+    hearts = []
     for pid in prob_ids:
-        prob = (db.session.query(Problem).filter_by(ID = pid))[0]
-        probs.append(prob)
+        if pid in favs:
+            hearts.append('♥')
+        else:
+            hearts.append('♡')
+
     return render_template('info.html',
             probs=probs,
-            test=test)
+            test=test,
+            hearts=hearts)
+
+@app.route('/favorite/<test_id>/<pid>')
+@login_required
+def favorite_problem(test_id, pid):
+    user = get_user()
+    favs = get_fav_ids()
+
+    if (test_id == "UNIV"):
+        if (pid in favs):
+            favs.remove(pid)
+            pfav_output = ""
+            for i in favs:
+                pfav_output = pfav_output + str(i) + ","
+            pfav_output = pfav_output[:len(pfav_output)-1]
+            get_user().pfav = pfav_output
+            db.session.commit()
+            flash("Problem with id " + pid + " successfully unfavorited.")
+            return redirect(url_for('view_tests'))
+        else:
+            return render_template("404.html"), 404
+
+    tests = db.session.query(Test).filter_by(test_url=test_id).order_by(Test.date.asc())
+    if len(tests.all()) == 0:
+        return render_template('404.html'), 404
+    test = tests[0]
+    if not int(test.author) == session['user_id']:
+        return render_template('403.html'), 403
+    prob_ids = test.problems.split(",")
+    if pid not in prob_ids:
+        return render_template('404.html'), 404
+    favs = get_fav_ids()
+    rem_state = 1
+    if pid in favs:
+        favs.remove(pid)
+    else:
+        favs.append(pid)
+        rem_state = 0
+    pfav_output = ""
+    for i in favs:
+        pfav_output = pfav_output + str(i) + ","
+    pfav_output = pfav_output[:len(pfav_output)-1]
+    get_user().pfav = pfav_output
+    db.session.commit()
+    if rem_state == 0:
+        flash("Problem with id " + pid + " successfully  favorited.")
+    else:
+        flash("Problem with id " + pid + " successfully unfavorited.")
+    return redirect(url_for("view_test_info", test_id=test_id))
+

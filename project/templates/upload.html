@@ -2,6 +2,15 @@
 
 {% block content %}
 
+<br>
+
+<h1>Upload Problems</h1>
+
+<h6 style="color: red;">ADMIN ONLY.</h6>
+<h6>Upload new problems below as a csv.</h6>
+
+<br>
+
 <form action = "/upload/" method = "POST" 
          enctype = "multipart/form-data">
          <input type = "file" name = "file" />

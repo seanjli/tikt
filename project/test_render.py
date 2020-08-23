@@ -10,7 +10,7 @@ def render_test(name, author, problems):
     for prob in problems:
         problemarea = problemarea + "\n \\item " + prob.statement + "\n" 
         answerarea = answerarea + "\n \\item $" + prob.answer + "$"
-        sourcearea = sourcearea + "\n \\item \\textbf{Source}: " + prob.title + "\n \n \\textbf{Tags}: " + prob.tags + "\n \n \\textbf{Solution}: \\url{" + prob.link + "}"
+        sourcearea = sourcearea + "\n \\item \\textbf{Source}: " + prob.title + "\n \n \\textbf{Subject}: " + prob.subject + "\n \n \\textbf{Difficulty}: " + str(prob.diff) + "\n \n \\textbf{Solution}: \\url{" + prob.link + "}"
 
     doc = """
 \\documentclass[11pt]{article}

@@ -5,13 +5,12 @@
 
 <h1>TiKTmaster</h1>
 <h6 class="text-muted">A list of tests you've generated in the past.</h6>
-	<br>
 	<div class="datagrid">
 		<table>
 			<thead>
 				<tr>
 					<th width="200px"><strong>Test Name</strong></th>
-					<th width="100px"><strong>Date Created</strong></th>
+					<th width="100px"><strong>Date</strong></th>
 					<th width="100px"><strong>Test ID</strong></th>
 					<th width="100px"><strong>Test Type</strong></th>
 					<th><strong>Links</strong></th>
@@ -30,6 +29,34 @@
 			{% endfor %}
 		</table>
 	</div>
-</div>
+
+	<br>
+	<br>
+
+	<h6 class="text-muted"> A list of problems you've favorited.</h6>
+	<div class="datagrid">
+		<table>
+			<thead>
+				<tr>
+					<th width="200px"><strong>Source</strong></th>
+					<th width="100px"><strong>ID</strong></th>
+					<th width="100px"><strong>Subj</strong></th>
+					<th width="100px"><strong>Diff</strong></th>
+					<th><strong>Link (with solution)</strong></th>
+				</tr>
+			</thead>
+			{% for prob in probs %}
+				<tr>
+					<td width="200px"><a href={{url_for('favorite_problem', test_id='UNIV', pid = prob.ID)}}>♥</a> {{ prob.title }}</td>
+					<td width="100px">{{ prob.ID }}</td>
+					<td width="100px">{{ prob.subject }}</td>
+					<td width="100px">{{ prob.diff }}</td>
+					<td>
+						<a href={{ prob.link.replace('\\','') }} target="_blank">(link)</a>
+					</td>
+				</tr>
+			{% endfor %}
+		</table>
+	</div>
 
 {% endblock %}
