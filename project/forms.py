@@ -1,6 +1,6 @@
 from flask_wtf import Form
 from wtforms import StringField, IntegerField, SelectField, \
-        PasswordField
+        PasswordField, SelectMultipleField
 from wtforms.validators import DataRequired, Length, NumberRange,\
         EqualTo, Email
 
@@ -44,8 +44,10 @@ class TestForm(Form):
     max_diff = SelectField('Max difficulty',coerce=int,
             validators=[DataRequired()],
             choices=[(5*i, str(5*i)) for i in range(11)])
+    tags = SelectMultipleField('Tags',coerce=int)
 
     def validate(self):
-        if not (Form.validate(self) and self.min_diff.data < self.max_diff.data):
+        if not (Form.validate(self) and self.min_diff.data < self.max_diff.data \
+                and len(self.tags.data) <= 3):
             return False
         return True

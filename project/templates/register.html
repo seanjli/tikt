@@ -7,19 +7,19 @@
 	<h3>TiKT Registration</h3>
 	<form action="/register/" method="post">
 		{{ form.csrf_token }}
-		<div class="input-group">
+		<div class="form-group">
 			{{ form.user.label }}
 			{{ form.user }}
 		</div>
-		<div class="input-group">
+		<div class="form-group">
 			{{ form.email.label }}
 			{{ form.email }}
 		</div>
-		<div class="input-group">
+		<div class="form-group">
 			{{ form.pwd.label }}
 			{{ form.pwd }}
 		</div>
-		<div class="input-group">
+		<div class="form-group">
 			{{ form.repeat_pwd.label }}
 			{{ form.repeat_pwd }}
 		</div>

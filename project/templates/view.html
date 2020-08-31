@@ -10,7 +10,7 @@
 			<thead>
 				<tr>
 					<th width="200px"><strong>Test Name</strong></th>
-					<th width="100px"><strong>Date</strong></th>
+					<th width="150px"><strong>Date Created</strong></th>
 					<th width="100px"><strong>Test ID</strong></th>
 					<th width="100px"><strong>Test Type</strong></th>
 					<th><strong>Links</strong></th>
@@ -19,11 +19,11 @@
 			{% for test in tests %}
 				<tr>
 					<td width="200px">{{ test.title }}</td>
-					<td width="100px">{{ test.date }}</td>
-					<td width="100px">{{ test.test_url }}</td>
-					<td width="100px">{{ test.exam_type }}</td>
+					<td width="100px">{{ test.date.strftime("%Y-%m-%d %H:%M") }}</td>
+					<td width="100px">{{ test.url }}</td>
+					<td width="100px">{{ test.type }}</td>
 					<td>
-						<a href="/static/tests/{{ test.test_url }}.pdf" target="_blank">(pdf)</a> <a href="/static/tests/{{ test.test_url}}.tex" target="_blank">(tex)</a> <a href="{{ url_for("view_test_info", test_id=test.test_url)}}">(info)</a>
+						<a href="/static/tests/{{ test.url }}.pdf" target="_blank">(pdf)</a> <a href="/static/tests/{{ test.url}}.tex" target="_blank">(tex)</a> <a href="{{ url_for("view_test_info", test_id=test.url)}}">(info)</a>
 					</td>
 				</tr>
 			{% endfor %}
@@ -47,8 +47,8 @@
 			</thead>
 			{% for prob in probs %}
 				<tr>
-					<td width="200px"><a href={{url_for('favorite_problem', test_id='UNIV', pid = prob.ID)}}>♥</a> {{ prob.title }}</td>
-					<td width="100px">{{ prob.ID }}</td>
+					<td width="200px"><a href={{url_for('unfavorite_problem', test_url='UNIV', prob_id = prob.id)}}>♥</a> {{ prob.title }}</td>
+					<td width="100px">{{ prob.id }}</td>
 					<td width="100px">{{ prob.subject }}</td>
 					<td width="100px">{{ prob.diff }}</td>
 					<td>

@@ -1,73 +1,110 @@
 from index import db
+import datetime
 
-class Problem(db.Model):
+# MANY TO MANY TABLES
 
-    __tablename__ = "aime"
+favorites = db.Table('favorites',
+        db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+        db.Column('problem_id', db.Integer, db.ForeignKey('problem.id'))
+        )
 
-    ID = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String, nullable=False)
-    tags = db.Column(db.String, nullable=False)
-    subject = db.Column(db.String, nullable=False)
-    diff = db.Column(db.Integer)
-    statement = db.Column(db.String, nullable=False)
-    link = db.Column(db.String, nullable=False)
-    answer = db.Column(db.String, nullable=False)
+usedprobs = db.Table('usedprobs',
+        db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+        db.Column('problem_id', db.Integer, db.ForeignKey('problem.id'))
+        )
 
-    def __init__(self, title, tags, subject, diff, statement, link, answer):
-        self.title = title
-        self.tags = tags
-        self.subject = subject
-        self.diff = diff
-        self.statement = statement
-        self.link = link
-        self.answer = answer
+taglist = db.Table('taglist',
+        db.Column('problem_id', db.Integer, db.ForeignKey('problem.id')),
+        db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'))
+        )
 
-    def __repr__(self):
-        return "<problem {0}>".format(self.ID)
+testcomp = db.Table('testcomp',
+        db.Column('test_id', db.Integer, db.ForeignKey('test.id')),
+        db.Column('problem_id', db.Integer, db.ForeignKey('problem.id'))
+        )
+
+bantable = db.Table('bantable',
+        db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+        db.Column('contest_id', db.Integer, db.ForeignKey('contest.id'))
+        )
+
+# USER CLASS
 
 class User(db.Model):
 
-    __tablename__ = "users"
+    # ATTRIBUTES
 
-    user_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     user = db.Column(db.String, unique=True, nullable=False)
+    pwd = db.Column(db.String, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
-    salted_pwd = db.Column(db.String, nullable=False)
-    testcount = db.Column(db.Integer)
-    pused = db.Column(db.String)
-    pfav = db.Column(db.String)
-    role = db.Column(db.String, default='user')
+    role = db.Column(db.String, default="user")
+    logged = db.Column(db.Integer, default=0)
 
-    def __init__(self, user, email, salted_pwd, role=None):
-        self.user = user
-        self.email = email
-        self.salted_pwd = salted_pwd
-        self.testcount = 0
-        self.pused = ""
-        self.pfav = ""
-        self.role = role
+    # RELATIONS
 
-    def __repr__(self):
-        return '<User {0}>'.format(self.user)
+    favs = db.relationship('Problem', secondary=favorites, backref=db.backref('lovers'))
+    used = db.relationship('Problem', secondary=usedprobs, backref=db.backref('users'))
+    tests = db.relationship('Test', backref='user')
+    banned = db.relationship('User', secondary=bantable, backref='haters')
+
+# PROBLEM CLASS
+
+class Problem(db.Model):
+    
+    # ATTRIBUTES
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String, nullable=False)
+    subject = db.Column(db.String, nullable=False)
+    diff = db.Column(db.Integer)
+    statement = db.Column(db.String, nullable=False)
+    answer = db.Column(db.String, nullable=False)
+    link = db.Column(db.String, nullable=False)
+    contest_id = db.Column(db.Integer, db.ForeignKey('contest.id'))
+    
+    # RELATIONS
+
+    tags = db.relationship('Tag', secondary=taglist, backref=db.backref('probs'))
+
+# TAG CLASS
+
+class Tag(db.Model):
+
+    # ATTRIBUTES
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    pop = db.Column(db.Integer, default=0)
+
+# TEST CLASS
 
 class Test(db.Model):
 
-    __tablename__ = 'tests'
+    # ATTRIBUTES
 
-    test_id = db.Column(db.Integer, primary_key=True)
-    test_url = db.Column(db.String, unique=True)
+    id = db.Column(db.Integer, primary_key=True)
+    url = db.Column(db.String, nullable=False)
     title = db.Column(db.String, nullable=False)
-    author = db.Column(db.String, nullable=False)
-    date = db.Column(db.Date, nullable=False)
-    exam_type = db.Column(db.String, nullable=False)
-    pnum = db.Column(db.Integer, nullable=False)
-    problems = db.Column(db.String, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    date = db.Column(db.DateTime, nullable=False, default=datetime.datetime.utcnow)
+    type = db.Column(db.String, nullable=False)
+    size = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, test_url, title, author, date, exam_type, pnum, problems):
-        self.test_url = test_url
-        self.title = title
-        self.author = author
-        self.date = date
-        self.exam_type = exam_type
-        self.pnum = pnum
-        self.problems = problems
+    # RELATIONS
+
+    probs = db.relationship('Problem', secondary=testcomp, backref=db.backref('tests'))
+
+# CONTEST CLASS
+
+class Contest(db.Model):
+
+    # ATTRIBUTES
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    unpop = db.Column(db.Integer)
+
+    # RELATIONS
+
+    probs = db.relationship('Problem', backref='contest')

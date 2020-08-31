@@ -1,21 +1,77 @@
 {% extends "_base.html" %}
 {% block content %}
 
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+<!--
+$(document).on("click", "button.fav", function() {
+		$(this).html("♥");
+		$(this).removeClass("fav");
+		$(this).addClass("unfav");
+		var test = this.id.split(" ")[0];
+		var prob = this.id.split(" ")[1];
+		$.ajax({
+			url: "",
+		      	type: "get",
+		      	data: {test: test, prob: prob},
+		      	success: function(response) {
+			},
+		      	error: function(xhr) {
+				$(this).html("Oh noes.");
+			}
+		    });
+
+	});
+
+$(document).on("click", "button.unfav", function() {
+		$(this).html("♡");
+		$(this).removeClass("unfav");
+		$(this).addClass("fav");
+		var test = this.id.split(" ")[0];
+		var prob = this.id.split(" ")[1];
+		$.ajax({
+			url: "",
+		      	type: "get",
+		      	data: {test: test, prob: prob},
+		      	success: function(response) {
+			},
+		      	error: function(xhr) {
+				$(this).html("Oh noes.");
+			}
+		    });
+
+	});
+-->
+
+</script>
+
+<style>
+button {
+  width:35px;
+}
+</style>
+
 <br>
 
 <h1>Test Info</h1>
 <h5>Test Title: {{ test.title }}</h5>
-<h5>Date Created: {{ test.date }}</h5>
-<h5>Exam Type: {{ test.exam_type }}</h5>
-<h5>Number of problems: {{ test.pnum }}</h5>
+<h5>Date Created: {{  test.date.strftime("%Y-%m-%d %H:%M") }}</h5>
+<h5>Exam Type: {{ test.type }}</h5>
+<h5>Number of problems: {{ test.size }}</h5>
 
 <hr>
 
 {% for prob in probs %}
-<h5>Problem {{probs.index(prob)+1}} <a href="{{url_for('favorite_problem',test_id=test.test_url, pid=prob.ID)}}"> <strong>{{hearts[probs.index(prob)]}}</strong></a></h5>
+{% if hearts[probs.index(prob)] == "nf" %}
+<a href="{{url_for('favorite_problem', test_url = test.url, prob_id = prob.id)}}">Favorite</a>
+{% else %}
+<a href="{{url_for('unfavorite_problem', test_url = test.url, prob_id = prob.id)}}">Unfavorite</a>
+{% endif %}
+
+<h5>Problem {{probs.index(prob)+1}}</strong></a></h5>
 	<strong>Source: </strong>{{prob.title}}
 	<br>
-	<strong>ID: </strong>{{prob.ID}}
+	<strong>ID: </strong>{{prob.id}}
 	<br>
 	<strong>Subject: </strong>{{prob.subject}}
 	<br>
